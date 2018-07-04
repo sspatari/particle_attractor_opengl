@@ -1,0 +1,8 @@
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
+
+# CMake files
+cmake-build-debug
