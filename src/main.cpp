@@ -2,8 +2,34 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
-int main() {
+/// Error callback for glfw.
+static void error_callback(int error, const char* description)
+{
+    std::cerr << "Error: " << description << std::endl;
+}
+
+static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, GLFW_TRUE);
+}
+
+static void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+    glViewport(0, 0, width, height);
+}
+
+static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+
+}
+
+int main()
+{
     GLFWwindow* window;
+
+    /* Set GLFW error callback */
+    glfwSetErrorCallback(error_callback);
 
     /* Initialize the library */
     if (!glfwInit())
@@ -22,9 +48,26 @@ int main() {
         return -1;
     }
 
+
+    int frame_width;
+    int frame_height;
+
+    /* doc: On some machines screen coordinates and pixels are the same, but on others they will not be.
+     * So we get the real frame size in pixels here */
+    glfwGetFramebufferSize(window, &frame_width, &frame_height);
+
+    /* Set the callbacks */
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetKeyCallback(window, key_callback);
+    glfwSetScrollCallback(window, scroll_callback);
+
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
 
+    /* Enable v-sync */
+    glfwSwapInterval(1);
+
+    /* Initiate Glew that heps in quering and loading opengl extensions */
     GLenum err = glewInit();
     if (GLEW_OK != err)
     {
@@ -32,6 +75,7 @@ int main() {
         std::cerr << "Error: " << glewGetErrorString(err) << std::endl;
     }
 
+    /* Output version of OpenGL that is used*/
     std::cout << glGetString(GL_VERSION) << std::endl;
 
     /* Loop until the user closes the window */
