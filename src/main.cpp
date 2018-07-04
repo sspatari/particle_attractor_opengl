@@ -2,24 +2,40 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
-/// Error callback for glfw.
-static void error_callback(int error, const char* description)
+static void APIENTRY openglErrorCallback(
+    GLenum source,
+    GLenum type,
+    GLuint id,
+    GLenum severity,
+    GLsizei length,
+    const GLchar* message,
+    const void* userParam) {
+    (void)source; (void)type; (void)id;
+    (void)severity; (void)length; (void)userParam;
+    std::cerr << "Opengl Error: " << message << std::endl;
+    if (severity==GL_DEBUG_SEVERITY_HIGH) {
+        std::cerr << "Aborting..." << std::endl;
+        abort();
+    }
+}
+
+static void errorCallback(int error, const char* description)
 {
     std::cerr << "Error: " << description << std::endl;
 }
 
-static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GLFW_TRUE);
 }
 
-static void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+static void framebufferSizeCallback(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
 }
 
-static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+static void scrollCallback(GLFWwindow* window, double xoffset, double yoffset)
 {
 
 }
@@ -29,7 +45,7 @@ int main()
     GLFWwindow* window;
 
     /* Set GLFW error callback */
-    glfwSetErrorCallback(error_callback);
+    glfwSetErrorCallback(errorCallback);
 
     /* Initialize the library */
     if (!glfwInit())
@@ -49,17 +65,17 @@ int main()
     }
 
 
-    int frame_width;
-    int frame_height;
+    int frameWidth;
+    int frameHeight;
 
     /* doc: On some machines screen coordinates and pixels are the same, but on others they will not be.
      * So we get the real frame size in pixels here */
-    glfwGetFramebufferSize(window, &frame_width, &frame_height);
+    glfwGetFramebufferSize(window, &frameWidth, &frameHeight);
 
     /* Set the callbacks */
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-    glfwSetKeyCallback(window, key_callback);
-    glfwSetScrollCallback(window, scroll_callback);
+    glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
+    glfwSetKeyCallback(window, keyCallback);
+    glfwSetScrollCallback(window, scrollCallback);
 
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
@@ -77,6 +93,14 @@ int main()
 
     /* Output version of OpenGL that is used*/
     std::cout << glGetString(GL_VERSION) << std::endl;
+
+    /* Enable the debug callback */
+    glEnable(GL_DEBUG_OUTPUT);
+    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+    glDebugMessageCallback(openglErrorCallback, nullptr);
+    glDebugMessageControl(
+        GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, static_cast<GLboolean>(true)
+    );
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
