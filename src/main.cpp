@@ -1,6 +1,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include "shaders/Shader.h"
 
 static void APIENTRY openglErrorCallback(
     GLenum source,
@@ -12,7 +13,7 @@ static void APIENTRY openglErrorCallback(
     const void* userParam) {
     (void)source; (void)type; (void)id;
     (void)severity; (void)length; (void)userParam;
-    std::cerr << "Opengl Error: " << message << std::endl;
+    std::cerr << "[Opengl Error] (" << id << "): "<< message << std::endl;
     if (severity==GL_DEBUG_SEVERITY_HIGH) {
         std::cerr << "Aborting..." << std::endl;
         abort();
@@ -102,11 +103,56 @@ int main()
         GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, static_cast<GLboolean>(true)
     );
 
+    glEnable(GL_PROGRAM_POINT_SIZE);
+
+    float value[2];
+    float step;
+    float size;
+    glGetFloatv(GL_POINT_SIZE_RANGE, value);
+    glGetFloatv(GL_POINT_SIZE_GRANULARITY, &step);
+    glGetFloatv(GL_POINT_SIZE, &size);
+
+    std::cout << "range: " << value[0] << " " << value[1] << std::endl;
+    std::cout << "step = " << step << std::endl;
+    std::cout << "size = " << size << std::endl;
+
+
+    float positions[] = {
+        -0.5f, -0.5f, // 0
+         0.5f, -0.5f, // 1
+         0.5f,  0.5f, // 2
+        -0.5f,  0.5f, // 3
+    };
+
+    unsigned int vao;
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+
+    unsigned int vbo;
+    glGenBuffers(1, &vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(float), positions, GL_STATIC_DRAW);
+
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+
+    Shader shader("src/shaders/particle.glsl");
+    shader.Bind();
+
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    shader.Unbind();
+
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
+
+        shader.Bind();
+        glBindVertexArray(vao);
+
+        glDrawArrays(GL_POINTS, 0, 4);
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);

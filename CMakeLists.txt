@@ -21,7 +21,12 @@ if(NOT {glfw3_FOUND)
     message("glfw3 not found")
 endif()
 
-add_executable(${PROJECT_NAME} src/main.cpp)
+add_executable(
+        ${PROJECT_NAME}
+        src/main.cpp
+        src/shaders/Shader.cpp
+        src/shaders/Shader.h
+)
 
 target_link_libraries(
         ${PROJECT_NAME}
