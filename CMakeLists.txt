@@ -31,6 +31,8 @@ add_executable(
         src/VertexBufferLayout.h
         src/VertexBuffer.cpp
         src/VertexBuffer.h
+        src/DisplayManager.cpp
+        src/DisplayManager.h
 )
 
 target_link_libraries(
