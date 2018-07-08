@@ -105,11 +105,6 @@ void DisplayManager::createDisplay()
     glDebugMessageControl(
         GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, static_cast<GLboolean>(true)
     );
-
-    // additive blending
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-    glEnable(GL_PROGRAM_POINT_SIZE);
 }
 
 void DisplayManager::closeDisplay()

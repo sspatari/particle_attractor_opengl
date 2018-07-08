@@ -8,7 +8,6 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-
 class DisplayManager
 {
 private:
@@ -36,7 +35,7 @@ public:
     static void closeDisplay();
     inline static int isCloseRequested() { return glfwWindowShouldClose(window); }
     static void updateDisplay();
-    inline static GLFWwindow* getWindow() { return  window;};
+    inline static GLFWwindow* getWindow() { return window;};
 };
 
 
