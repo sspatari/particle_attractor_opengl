@@ -83,7 +83,7 @@ unsigned int Shader::CompileShader(unsigned int type, const std::string &source)
     {
         int length;
         glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
-        auto message  = (char*)alloca(length * sizeof(char));
+        auto message  = static_cast<char*>(alloca(length * sizeof(char))); //allocate on stack
         glGetShaderInfoLog(id, length, &length, message);
         std::cout << "Failed to compile " << (type == GL_VERTEX_SHADER ? "vertex" : "fragment") << " shader!" << std::endl;
         std::cout << message << std::endl;
