@@ -1,16 +1,21 @@
 #shader vertex
 #version 460 core
 
-layout(location = 0) in vec4 position;
+layout(location = 0) in vec4 in_position;
+layout(location = 1) in vec4 in_color;
+
+out vec4 vColor;
 
 void main() {
-    gl_Position = position;
+    gl_Position = in_position;
+    vColor = in_color;
     gl_PointSize = 100.0;
 }
 
 #shader fragment
 #version 460 core
 
+in vec4 vColor;
 out vec4 fragColor;
 
 void main() {
@@ -18,5 +23,5 @@ void main() {
     if (dot(circCoord, circCoord) > 1.0) {
         discard;
     }
-    fragColor = vec4(1.0, 1.0, 1.0, 1.0);
+    fragColor = vColor;
 }

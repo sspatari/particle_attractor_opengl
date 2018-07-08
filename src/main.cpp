@@ -2,6 +2,10 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include "shaders/Shader.h"
+#include "VertexArray.h"
+
+int frameWidth;
+int frameHeight;
 
 static void APIENTRY openglErrorCallback(
     GLenum source,
@@ -34,6 +38,8 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
 static void framebufferSizeCallback(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
+    frameWidth = width;
+    frameHeight = height;
 }
 
 static void scrollCallback(GLFWwindow* window, double xoffset, double yoffset)
@@ -65,10 +71,6 @@ int main()
         return -1;
     }
 
-
-    int frameWidth;
-    int frameHeight;
-
     /* doc: On some machines screen coordinates and pixels are the same, but on others they will not be.
      * So we get the real frame size in pixels here */
     glfwGetFramebufferSize(window, &frameWidth, &frameHeight);
@@ -95,7 +97,7 @@ int main()
     /* Output version of OpenGL that is used*/
     std::cout << glGetString(GL_VERSION) << std::endl;
 
-    /* Enable the debug callback */
+    /* Enable the opengl's debug callback */
     glEnable(GL_DEBUG_OUTPUT);
     glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
     glDebugMessageCallback(openglErrorCallback, nullptr);
@@ -118,29 +120,29 @@ int main()
 
 
     float positions[] = {
-        -0.5f, -0.5f, // 0
-         0.5f, -0.5f, // 1
-         0.5f,  0.5f, // 2
-        -0.5f,  0.5f, // 3
+        -0.5f, -0.5f, 0.0f, 1.0f, // 0
+         0.5f, -0.5f, 0.0f, 1.0f, // 1
+         0.5f,  0.5f, 0.0f, 1.0f, // 2
+        -0.5f,  0.5f, 0.0f, 1.0f, // 3
+         1.0f,  0.0f, 0.0f, 0.5f,  // 0(color)
+         1.0f,  0.0f, 0.0f, 0.5f,  // 1(color)
+         1.0f,  0.0f, 0.0f, 0.5f,  // 2(color)
+         1.0f,  0.0f, 0.0f, 0.5f,  // 3(color)
     };
 
-    unsigned int vao;
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
+    VertexArray va;
+    VertexBuffer vb(positions, 2 * 4 * 4 * sizeof(float));
 
-    unsigned int vbo;
-    glGenBuffers(1, &vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(float), positions, GL_STATIC_DRAW);
-
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+    VertexBufferLayout layout;
+    layout.Push<float>(4, 0);
+    layout.Push<float>(4, 4 * 4 * sizeof(float));
+    va.AddBuffer(vb, layout);
 
     Shader shader("src/shaders/particle.glsl");
     shader.Bind();
 
-    glBindVertexArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    va.Unbind();
+    vb.Unbind();
     shader.Unbind();
 
     /* Loop until the user closes the window */
@@ -150,9 +152,9 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
 
         shader.Bind();
-        glBindVertexArray(vao);
+        va.Bind();
 
-        glDrawArrays(GL_POINTS, 0, 4);
+        glDrawArrays(GL_POINTS, 0, 2 * 4 * 4);
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);

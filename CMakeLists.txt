@@ -26,6 +26,11 @@ add_executable(
         src/main.cpp
         src/shaders/Shader.cpp
         src/shaders/Shader.h
+        src/VertexArray.cpp
+        src/VertexArray.h
+        src/VertexBufferLayout.h
+        src/VertexBuffer.cpp
+        src/VertexBuffer.h
 )
 
 target_link_libraries(
