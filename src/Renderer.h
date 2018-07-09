@@ -17,12 +17,16 @@ private:
     float *h_data;  // contain positions and colors on host
     float *h_state; // contain vec3 force and mass on host
     void *d_state; // contain vec3 force and mass memory on device
+    int numSMs;
     cudaGraphicsResource *cuda_vbo_resource = nullptr;
+    int speed = 1;
+    double lastTime, currentTime;
 
-    static int const MESH_WIDTH = 2;
-    static int const MESH_HEIGHT = 2;
+    static int const MESH_WIDTH = 1024;
+    static int const MESH_HEIGHT = 1024;
 
     void createBuffers();
+    void runCuda(double delta);
 public:
     Renderer();
     void render();

@@ -15,6 +15,7 @@ private:
     static int const HEIGHT = 480;
     static int frameWidth, frameHeight;
     static GLFWwindow* window;
+    static bool resetFlag;
 
     DisplayManager() = default;
     ~DisplayManager() = default;
@@ -31,9 +32,21 @@ private:
     static void scrollCallback(GLFWwindow* window, double xoffset, double yoffset);
 
 public:
+    struct CursorPosition
+    {
+        double x;
+        double y;
+    };
+
+    static double getCurrentTime();
+    static CursorPosition getCursorPos();
+    inline static int getFrameWidth() { return frameWidth; }
+    inline static int getFrameHeight() { return frameHeight; }
     static void createDisplay();
     static void closeDisplay();
-    inline static int isCloseRequested() { return glfwWindowShouldClose(window); }
+    inline static void resetFrameBufferResetFlag() { resetFlag = 0;}
+    inline static bool framebufferSizeWasReset() { return resetFlag; }
+    inline static int shouldCloseWindow() { return glfwWindowShouldClose(window); }
     static void updateDisplay();
     inline static GLFWwindow* getWindow() { return window;};
 };

@@ -5,6 +5,9 @@ set(CMAKE_CXX_STANDARD 11)
 
 ## -- CUDA --
 find_package(CUDA REQUIRED)
+if(NOT ${CUDA_FOUND})
+    message("CUDA not found")
+endif()
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     if(CUDA_VERSION_STRING VERSION_EQUAL 8.0 OR CUDA_VERSION_STRING VERSION_GREATER 8.0)
         if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 6.0
@@ -20,7 +23,7 @@ cmake -DCMAKE_C_COMPILER=`which gcc-4` -DCMAKE_CXX_COMPILER=`which g++-4` ..")
         endif()
     endif()
 endif()
-include(FindCUDA)
+
 include_directories(${CUDA_INCLUDE_DIRS})
 list(APPEND CUDA_NVCC_FLAGS "-std=c++11 -gencode arch=compute_50,code=compute_50")
 set(CUDA_PROPAGATE_HOST_FLAGS OFF)
@@ -62,10 +65,12 @@ cuda_add_executable(
         src/Renderer.cpp
         src/Renderer.h
         src/CudaGlobal.h
+        src/kernel.cu
 )
 
 target_link_libraries(
         ${PROJECT_NAME}
+        ${CUDA_LIBRARIES}
         ${OPENGL_LIBRARY}
         ${GLEW_LIBRARY}
         glfw

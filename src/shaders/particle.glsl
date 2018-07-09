@@ -6,10 +6,14 @@ layout(location = 1) in vec4 in_color;
 
 out vec4 vColor;
 
+uniform mat4 u_model;
+uniform mat4 u_view;
+uniform mat4 u_projection;
+
 void main() {
-    gl_Position = in_position;
+    gl_Position = u_projection * u_view * u_model * in_position;
     vColor = in_color;
-    gl_PointSize = 100.0;
+    gl_PointSize = 2.0;
 }
 
 #shader fragment

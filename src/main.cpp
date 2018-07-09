@@ -8,7 +8,7 @@ int main()
     Renderer renderer;
 
     /* Loop until the user closes the window */
-    while (!DisplayManager::isCloseRequested())
+    while (!DisplayManager::shouldCloseWindow())
     {
         renderer.render();
 

@@ -5,6 +5,7 @@
 #include <iostream>
 #include "DisplayManager.h"
 
+bool DisplayManager::resetFlag = 1;
 int DisplayManager::frameWidth = 0;
 int DisplayManager::frameHeight = 0;
 GLFWwindow* DisplayManager::window = nullptr;
@@ -40,6 +41,7 @@ void DisplayManager::keyCallback(GLFWwindow* window, int key, int scancode, int 
 void DisplayManager::framebufferSizeCallback(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
+    resetFlag = 1;
     frameWidth = width;
     frameHeight = height;
 }
@@ -47,6 +49,18 @@ void DisplayManager::framebufferSizeCallback(GLFWwindow* window, int width, int 
 void DisplayManager::scrollCallback(GLFWwindow* window, double xoffset, double yoffset)
 {
 
+}
+
+double DisplayManager::getCurrentTime()
+{
+    return glfwGetTime();
+}
+
+DisplayManager::CursorPosition DisplayManager::getCursorPos()
+{
+    double x, y;
+    glfwGetCursorPos(window, &x, &y);
+    return { x, y };
 }
 
 void DisplayManager::createDisplay()
