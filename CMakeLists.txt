@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 project(particle_attractor_opengl)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 
 ## -- CUDA --
 find_package(CUDA REQUIRED)
@@ -25,7 +25,7 @@ cmake -DCMAKE_C_COMPILER=`which gcc-4` -DCMAKE_CXX_COMPILER=`which g++-4` ..")
 endif()
 
 include_directories(${CUDA_INCLUDE_DIRS})
-list(APPEND CUDA_NVCC_FLAGS "-std=c++11 -gencode arch=compute_50,code=compute_50")
+list(APPEND CUDA_NVCC_FLAGS "-std=c++14 -gencode arch=compute_50,code=compute_50")
 set(CUDA_PROPAGATE_HOST_FLAGS OFF)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
