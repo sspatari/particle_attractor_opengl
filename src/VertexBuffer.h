@@ -16,6 +16,8 @@ public:
 
     void Bind() const;
     void Unbind() const;
+
+    inline const unsigned int getBufferId() const { return m_RendererID; }
 };
 
 
