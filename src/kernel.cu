@@ -57,13 +57,15 @@ __global__ void d_advance(float4* verts, float4* states,
          * the new particle state vector is given by current directional force
          * and the old state scaled by the particle mass
          */
-        float flen = rsqrtf( dir_force.x*dir_force.x
+
+        //calcualte inverse square root of dir_force vector lenght
+        float reciprocalSqrt = rsqrtf( dir_force.x*dir_force.x
                              +dir_force.y*dir_force.y
             /*+dir_force.z*dir_force.z*/);
 
-        // normalised force vector
-        dir_force.x *= flen;
-        dir_force.y *= flen;
+        // normalised dir_force vector
+        dir_force.x *= reciprocalSqrt;
+        dir_force.y *= reciprocalSqrt;
         /*dir_force.z *= flen;*/
 
         state.x += delta * dir_force.x;
