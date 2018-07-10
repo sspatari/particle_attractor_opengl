@@ -13,7 +13,7 @@ uniform mat4 u_projection;
 void main() {
     gl_Position = u_projection * u_view * u_model * in_position;
     vColor = in_color;
-    gl_PointSize = 2.0;
+    gl_PointSize = 1.0;
 }
 
 #shader fragment

@@ -96,7 +96,7 @@ __global__ void d_advance(float4* verts, float4* states,
 void kernel_reset(float4* verts, float4* states,
                   int ww, int wh,
                   int mesh_width, int mesh_height,
-                  int numSMs)
+                  unsigned int numSMs)
 {
     dim3 threads(32,32);
     dim3 blocks(32*numSMs);
@@ -110,7 +110,7 @@ void kernel_advance(float4* verts, float4* states,
                     float mx, float my,
                     int mesh_count,
                     float speed,
-                    int numSMs,
+                    unsigned int numSMs,
                     double delta)
 {
     dim3 threads(1024);

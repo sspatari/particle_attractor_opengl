@@ -8,13 +8,13 @@
 void kernel_reset(float4* verts, float4* states,
                   int ww, int wh,
                   int mesh_width, int mesh_height,
-                  int numSMs);
+                  unsigned int numSMs);
 
 void kernel_advance(float4* verts, float4* states,
                     float mx, float my,
                     int mesh_count,
                     float speed,
-                    int numSMs,
+                    unsigned int numSMs,
                     double delta);
 
 #endif //PARTICLE_ATTRACTOR_OPENGL_KERNEL_H

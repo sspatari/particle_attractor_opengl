@@ -21,7 +21,10 @@ Renderer::Renderer() : shader("src/shaders/particle.glsl")
     CHECK_CUDA(cudaSetDevice(0));
 
     //get the number of procesors that the device has
-    cudaDeviceGetAttribute(&numSMs, cudaDevAttrMultiProcessorCount, 0);
+    int value;
+    cudaDeviceGetAttribute(&value, cudaDevAttrMultiProcessorCount, 0);
+    numSMs = static_cast<unsigned int>(value);
+
     //create buffers related to OpenGL and CUDA;
     createBuffers();
     lastTime = DisplayManager::getCurrentTime();
@@ -76,7 +79,7 @@ void Renderer::createBuffers()
         h_state[i+1] = 0.0f;  // force.y
         h_state[i+2] = 0.0f;  // force.z
         // random mass of particle
-        h_state[i+3] = 75.0f + (static_cast<float>(rand())/RAND_MAX) * 25.0f;
+        h_state[i+3] = 75.0f + static_cast<float>(rand()) / RAND_MAX * 25.0f;
     }
 
     // malloc for cuda: cudaMalloc(devicePtr,size)
