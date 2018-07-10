@@ -52,7 +52,7 @@ endif()
 
 cuda_add_executable(
         ${PROJECT_NAME}
-        src/main.cpp
+        src/Application.cpp
         src/shaders/Shader.cpp
         src/shaders/Shader.h
         src/VertexArray.cpp
