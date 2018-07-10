@@ -17,31 +17,10 @@ Renderer::Renderer() : shader("src/shaders/particle.glsl")
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
     glEnable(GL_PROGRAM_POINT_SIZE);
 
-//    float positions[] = {
-//        -0.5f, -0.5f, 0.0f, 1.0f, // 0
-//        0.5f, -0.5f, 0.0f, 1.0f, // 1
-//        0.5f,  0.5f, 0.0f, 1.0f, // 2
-//        -0.5f,  0.5f, 0.0f, 1.0f, // 3
-//        1.0f,  0.0f, 0.0f, 0.5f, // 0
-//        1.0f,  0.0f, 0.0f, 0.5f, // 1
-//        1.0f,  0.0f, 0.0f, 0.5f, // 2
-//        1.0f,  0.0f, 0.0f, 0.5f, // 3
-//    };
-//
-//    VertexBuffer vb(positions, 2 * 4 * 4 * sizeof(float));
-//
-//    VertexBufferLayout layout;
-//    layout.Push<float>(4);
-//    layout.Push<float>(4);
-//    va.AddBuffer(vb, layout);
-//
-//    shader.Bind();
-//
-//    va.Unbind();
-//    vb.Unbind();
-//    shader.Unbind();
+    //set the GPU to use
+    CHECK_CUDA(cudaSetDevice(0));
 
-    CHECK_CUDA( cudaSetDevice(0) );
+    //get the number of procesors that the device has
     cudaDeviceGetAttribute(&numSMs, cudaDevAttrMultiProcessorCount, 0);
     //create buffers related to OpenGL and CUDA;
     createBuffers();
@@ -184,7 +163,7 @@ void Renderer::cleanUp()
 {
     // unregister this buffer object with CUDA
     cudaGraphicsUnregisterResource(cuda_vbo_resource);
-    CHECK_CUDA( cudaFree(d_state) );
+    CHECK_CUDA(cudaFree(d_state));
     d_state = nullptr;
 
     shader.Unbind();

@@ -64,7 +64,7 @@ cuda_add_executable(
         src/DisplayManager.h
         src/Renderer.cpp
         src/Renderer.h
-        src/CudaGlobal.h
+        src/cudaGlobal.h
         src/kernel.cu
 )
 

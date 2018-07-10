@@ -11,11 +11,11 @@
 #include <cuda_gl_interop.h>
 #include <device_launch_parameters.h>
 
-#define CHECK_CUDA(ans) check_cuda((ans), "", #ans, __FILE__, __LINE__)
-#define CHECK_LAST(msg) check_cuda(cudaGetLastError(), msg, "CHECK_LAST", __FILE__, __LINE__)
+#define CHECK_CUDA(ans) checkCuda((ans), "", #ans, __FILE__, __LINE__)
+#define CHECK_LAST(msg) checkCuda(cudaGetLastError(), msg, "CHECK_LAST", __FILE__, __LINE__)
 
 inline
-void throw_error(int code,
+void throwError(int code,
                  const char* error_string,
                  const char* msg,
                  const char* func,
@@ -32,9 +32,9 @@ void throw_error(int code,
 }
 
 inline
-void check_cuda(cudaError_t code, const char* msg, const char *func, const char *file, int line) {
+void checkCuda(cudaError_t code, const char *msg, const char *func, const char *file, int line) {
     if (code != cudaSuccess) {
-        throw_error(static_cast<int>(code),
+        throwError(static_cast<int>(code),
                     cudaGetErrorString(code), msg, func, file, line);
     }
 }
@@ -46,9 +46,9 @@ std::stringstream getCUDADeviceInformations(int dev) {
     cudaDeviceProp prop;
     int runtimeVersion = 0;
     size_t f=0, t=0;
-    CHECK_CUDA( cudaRuntimeGetVersion(&runtimeVersion) );
-    CHECK_CUDA( cudaGetDeviceProperties(&prop, dev) );
-    CHECK_CUDA( cudaMemGetInfo(&f, &t) );
+    CHECK_CUDA(cudaRuntimeGetVersion(&runtimeVersion));
+    CHECK_CUDA(cudaGetDeviceProperties(&prop, dev));
+    CHECK_CUDA(cudaMemGetInfo(&f, &t));
     info << '"' << prop.name << '"'
          << ", \"CC\", " << prop.major << '.' << prop.minor
          << ", \"Multiprocessors\", "<< prop.multiProcessorCount
@@ -65,7 +65,7 @@ inline
 std::stringstream listCudaDevices() {
     std::stringstream info;
     int nrdev = 0;
-    CHECK_CUDA( cudaGetDeviceCount( &nrdev ) );
+    CHECK_CUDA(cudaGetDeviceCount(&nrdev));
     if(nrdev==0)
         throw std::runtime_error("No CUDA capable device found");
     for(int i=0; i<nrdev; ++i)

@@ -5,7 +5,7 @@
 #ifndef PARTICLE_ATTRACTOR_OPENGL_RENDERER_H
 #define PARTICLE_ATTRACTOR_OPENGL_RENDERER_H
 
-#include "CudaGlobal.h"
+#include "cudaGlobal.h"
 #include "shaders/Shader.h"
 #include "VertexArray.h"
 
