@@ -22,8 +22,8 @@ private:
     int speed = 1;
     double lastTime, currentTime;
 
-    static int const MESH_WIDTH = 2048;
-    static int const MESH_HEIGHT = 2048;
+    static const unsigned int MESH_WIDTH = 2048;
+    static const unsigned int MESH_HEIGHT = 2048;
 
     void createBuffers();
     void runCuda(double delta);

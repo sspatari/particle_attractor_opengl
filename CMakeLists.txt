@@ -44,12 +44,6 @@ if(NOT ${GLEW_FOUND})
     message("GLEW not found")
 endif()
 
-## -- GLFW --
-find_package(glfw3 REQUIRED)
-if(NOT {glfw3_FOUND)
-    message("glfw3 not found")
-endif()
-
 cuda_add_executable(
         ${PROJECT_NAME}
         src/Application.cpp

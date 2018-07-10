@@ -105,9 +105,8 @@ void Renderer::runCuda(double delta)
     // map OpenGL buffer object to CUDA
     // Note: OpenGL binding and CUDA mapping on a buffer are mutually exclusive
     //  you will not be able to map a buffer if it is bound by OpenGL
-    //
-    // DEPRECATED: cudaGLMapBufferObject((void**)&dptr, vbo);
-    CHECK_CUDA(cudaGraphicsMapResources(1, &cuda_vbo_resource, 0));
+
+    CHECK_CUDA(cudaGraphicsMapResources(1, &cuda_vbo_resource, nullptr));
     CHECK_CUDA(cudaGraphicsResourceGetMappedPointer((void **) &dptr,
                                                     &num_bytes,
                                                     cuda_vbo_resource));
@@ -130,10 +129,8 @@ void Renderer::runCuda(double delta)
                        speed, numSMs, delta);
     }
 
-
     CHECK_LAST("Kernel launch failed.");
     // unmap buffer object
-    // DEPRECATED: checkCudaErrors(cudaGLUnmapBufferObject(vbo));
     CHECK_CUDA(cudaGraphicsUnmapResources(1, &cuda_vbo_resource, 0));
 }
 
@@ -144,7 +141,7 @@ void Renderer::render()
     va.Bind();
 
     currentTime = DisplayManager::getCurrentTime();
-    double delta = 100.0*(currentTime-lastTime);
+    double delta = 100.0 * (currentTime - lastTime);
     lastTime = currentTime;
 
     glm::mat4 model(1.0f);
@@ -166,6 +163,7 @@ void Renderer::cleanUp()
 {
     // unregister this buffer object with CUDA
     cudaGraphicsUnregisterResource(cuda_vbo_resource);
+    cuda_vbo_resource = nullptr;
     CHECK_CUDA(cudaFree(d_state));
     d_state = nullptr;
 
@@ -179,5 +177,5 @@ void Renderer::prepare()
     // Set the clear color
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     /* Render here */
-    glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }

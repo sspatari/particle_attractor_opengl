@@ -6,15 +6,14 @@
  */
 __global__ void d_reset(float4* verts, float4* states,
                          float ww, float wh,
-                         int mesh_width, int mesh_height)
+                         unsigned int mesh_width, unsigned int mesh_height)
 {
-    int x, y;
     //grid-stride loop
-    for (y = blockIdx.y * blockDim.y + threadIdx.y;
+    for (unsigned int y = blockIdx.y * blockDim.y + threadIdx.y;
          y < mesh_height;
          y += blockDim.y * gridDim.y)
     {
-        for (x = blockIdx.x * blockDim.x + threadIdx.x;
+        for (unsigned int x = blockIdx.x * blockDim.x + threadIdx.x;
              x < mesh_width;
              x += blockDim.x * gridDim.x)
         {
@@ -39,12 +38,11 @@ __global__ void d_reset(float4* verts, float4* states,
  */
 __global__ void d_advance(float4* verts, float4* states,
                            float mx, float my,
-                           int mesh_count,
+                           unsigned int mesh_count,
                            float speed,
                            float delta)
 {
-    int vi;
-    for (vi = blockIdx.x * blockDim.x + threadIdx.x;
+    for (unsigned int vi = blockIdx.x * blockDim.x + threadIdx.x;
          vi < mesh_count;
          vi += blockDim.x * gridDim.x)
     {
@@ -95,7 +93,7 @@ __global__ void d_advance(float4* verts, float4* states,
 
 void kernel_reset(float4* verts, float4* states,
                   int ww, int wh,
-                  int mesh_width, int mesh_height,
+                  unsigned int mesh_width, unsigned int mesh_height,
                   unsigned int numSMs)
 {
     dim3 threads(32,32);
@@ -108,7 +106,7 @@ void kernel_reset(float4* verts, float4* states,
 
 void kernel_advance(float4* verts, float4* states,
                     float mx, float my,
-                    int mesh_count,
+                    unsigned int mesh_count,
                     float speed,
                     unsigned int numSMs,
                     double delta)
