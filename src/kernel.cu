@@ -60,9 +60,12 @@ __global__ void d_advance(float4* verts, float4* states,
         float flen = rsqrtf( dir_force.x*dir_force.x
                              +dir_force.y*dir_force.y
             /*+dir_force.z*dir_force.z*/);
+
+        // normalised force vector
         dir_force.x *= flen;
         dir_force.y *= flen;
         /*dir_force.z *= flen;*/
+
         state.x += delta * dir_force.x;
         state.y += delta * dir_force.y;
         /*state.z += dir_force.z;*/

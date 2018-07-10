@@ -11,8 +11,8 @@
 class DisplayManager
 {
 private:
-    static int const WIDTH = 640;
-    static int const HEIGHT = 480;
+    static int const WIDTH = 1280;
+    static int const HEIGHT = 768;
     static int frameWidth, frameHeight;
     static GLFWwindow* window;
     static bool resetFlag;
