@@ -12,7 +12,7 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     if(CUDA_VERSION_STRING VERSION_EQUAL 9.0 OR CUDA_VERSION_STRING VERSION_GREATER 9.0)
         if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 8.0
                 OR CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL 8.0)
-            message(FATAL_ERROR "CUDA 9.0 does not support gcc6+. Please choose an older gcc version like:\n
+            message(FATAL_ERROR "CUDA 9.0 does not support gcc8+. Please choose an older gcc version like:\n
 cmake -DCMAKE_C_COMPILER=`which gcc-7` -DCMAKE_CXX_COMPILER=`which g++-7` ..")
         endif()
     elseif(CUDA_VERSION_STRING VERSION_EQUAL 7.5 OR CUDA_VERSION_STRING VERSION_GREATER 7.5)
